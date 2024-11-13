@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "taxi-fare-prediction"
+version = "0.1.0"
+description = ""
+authors = ["Arist0craft <dimnktn@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "<2.0"
+pandas = "^2.2.3"
+fastapi = "^0.115.5"
+
+
+[tool.poetry.group.dev.dependencies]
+lightgbm = "^4.5.0"
+seaborn = "^0.13.2"
+matplotlib = "^3.9.2"
+pytest = "^8.3.3"
+jupyter = "^1.1.1"
+ruff = "^0.7.3"
+pre-commit = "^4.0.1"
+scikit-learn = "^1.5.2"
+optuna = "^4.1.0"
+catboost = "^1.2.7"
+pyproj = "^3.7.0"
+holidays = "^0.60"
+category-encoders = "^2.6.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "I",
+    "E",
+    "W",
+    "F"
+]
+ignore = [
+    "E501",
+    "W293"
+]
+
+# Ruff VsCode Extension by some reason gave me a bug with sorting imports in Notebooks
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = ["I001", "F401"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
