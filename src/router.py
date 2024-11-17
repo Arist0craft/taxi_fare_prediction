@@ -10,6 +10,11 @@ settings: Settings = get_settings()
 router = APIRouter()
 
 
+@router.get("/")
+async def check() -> dict[str, str]:
+    return {"status": "ok, api is wooooooooooooOOsh?..."}
+
+
 @router.post("/bot")
 async def webhook(
     update: Update,

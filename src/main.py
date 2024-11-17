@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 
 from aiogram.types import WebhookInfo
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 
 from src.bot import get_bot
-from src.router import router as bot_router
+from src.router import router
 from src.settings import Settings, get_settings
 
 settings: Settings = get_settings()
@@ -39,22 +39,18 @@ async def set_webhook():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Контекстный менедежер для задач перед запуском и после запуска приложения
+
+    Args:
+        app (FastAPI): Приложение FastAPI
+    """
     await set_webhook()
     yield
-
-
-router = APIRouter()
-
-
-@router.get("/")
-async def check() -> dict[str, str]:
-    return {"status": "ok, api is wooooooooooooOOsh?..."}
 
 
 def create_app() -> FastAPI:
     app: FastAPI = FastAPI(lifespan=lifespan)
     app.include_router(router=router)
-    app.include_router(router=bot_router)
     return app
 
 

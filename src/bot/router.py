@@ -21,6 +21,28 @@ class MenuButtonsData(CallbackData, prefix="menu"):
     action: MenuButtons
 
 
+def get_menu_buttons_builder() -> InlineKeyboardBuilder:
+    """Создание кнопок - меню для всех сообщений
+
+    Returns:
+        InlineKeyboardBuilder: Строитель кнопок для меню
+    """
+    button_texts = [
+        "Одна поездка",
+        "Несколько поездок",
+        "Помощь",
+        "Статистика бота",
+        "Информация о боте",
+    ]
+
+    builder = InlineKeyboardBuilder()
+    for text, data in zip(button_texts, MenuButtons):
+        builder.button(text=text, callback_data=MenuButtonsData(action=data))
+
+    builder.adjust(2)
+    return builder
+
+
 async def start_help_info(message: types.Message, **kwargs):
     """
     Обработчик для команд /start, /help и кнопки Помощь
@@ -39,20 +61,7 @@ async def start_help_info(message: types.Message, **kwargs):
 • <b>"Статистика бота"</b> - покажет статистику использования бота
 • <b>"Информация о боте"</b> - расскажет о данных и модели, используемой в боте
     """
-
-    button_texts = [
-        "Одна поездка",
-        "Несколько поездок",
-        "Помощь",
-        "Статистика бота",
-        "Информация о боте",
-    ]
-
-    builder = InlineKeyboardBuilder()
-    for text, data in zip(button_texts, MenuButtons):
-        builder.button(text=text, callback_data=MenuButtonsData(action=data))
-
-    builder.adjust(2)
+    builder = get_menu_buttons_builder()
     await message.answer(
         answer_text, parse_mode=ParseMode.HTML, reply_markup=builder.as_markup()
     )
@@ -76,3 +85,30 @@ async def help_button(callback_query: types.CallbackQuery, **kwargs):
         callback_query (types.CallbackQuery): данные коллбэк кнопки Помощь
     """
     await start_help_info(callback_query.message, **kwargs)
+
+
+@router.callback_query(F.data == MenuButtonsData(action=MenuButtons.INFO).pack())
+async def info_button(callback_query: types.CallbackQuery, **kwargs):
+    """Обработчик для инлайн кнопки 'Информация о боте'
+
+    Args:
+        callback_query (types.CallbackQuery): _description_
+    """
+
+    answer_text = """
+Немного про бота:
+• <a href="https://github.com/Arist0craft/taxi_fare_prediction">Ссылка на GitHub проекта</a>
+• Автор бота - @DecadenceFull
+• Язык проекта - Python3
+• Модель под капотом - CatBoost
+• Данные взяты с <a href="https://stepik.org/course/125501/syllabus">Курса Stepik</a>
+
+Сам бот является лишь пэт-проектом, великого смысла не несёт
+"""
+    builder = get_menu_buttons_builder()
+    await callback_query.message.answer(
+        text=answer_text,
+        parse_mode=ParseMode.HTML,
+        link_preview_options=types.LinkPreviewOptions(is_disabled=True),
+        reply_markup=builder.as_markup(),
+    )
