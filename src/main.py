@@ -1,23 +1,23 @@
 from contextlib import asynccontextmanager
 
+from aiogram import Bot
 from aiogram.types import WebhookInfo
 from fastapi import FastAPI
 
 from src.bot import get_bot
 from src.router import router
 from src.settings import Settings, get_settings
+from src.utils.aiohttpt_client import get_aiohttp_client
 
 settings: Settings = get_settings()
 
 
-async def set_webhook():
+async def set_webhook(bot: Bot):
     """Установка вебхука телеграм бота на старте приложения
 
     Raises:
         RuntimeWarning: если вебхук установлен неудачно
     """
-
-    bot = get_bot()
 
     if (webhook_url := str(settings.TG_WEBHOOK_URL))[-1] == "/":
         webhook_url = str(settings.TG_WEBHOOK_URL)[:-1]
@@ -44,8 +44,13 @@ async def lifespan(app: FastAPI):
     Args:
         app (FastAPI): Приложение FastAPI
     """
-    await set_webhook()
+    bot = get_bot()
+    await set_webhook(bot)
+
     yield
+    aiohttp_client = get_aiohttp_client()
+    await aiohttp_client.close()
+    await bot.session.close()
 
 
 def create_app() -> FastAPI:
