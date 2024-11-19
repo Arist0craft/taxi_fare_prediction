@@ -1,23 +1,23 @@
 from contextlib import asynccontextmanager
 
+from aiogram import Bot
 from aiogram.types import WebhookInfo
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 
 from src.bot import get_bot
-from src.router import router as bot_router
+from src.router import router
 from src.settings import Settings, get_settings
+from src.utils.aiohttpt_client import get_aiohttp_client
 
 settings: Settings = get_settings()
 
 
-async def set_webhook():
+async def set_webhook(bot: Bot):
     """Установка вебхука телеграм бота на старте приложения
 
     Raises:
         RuntimeWarning: если вебхук установлен неудачно
     """
-
-    bot = get_bot()
 
     if (webhook_url := str(settings.TG_WEBHOOK_URL))[-1] == "/":
         webhook_url = str(settings.TG_WEBHOOK_URL)[:-1]
@@ -39,22 +39,23 @@ async def set_webhook():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await set_webhook()
+    """Контекстный менедежер для задач перед запуском и после запуска приложения
+
+    Args:
+        app (FastAPI): Приложение FastAPI
+    """
+    bot = get_bot()
+    await set_webhook(bot)
+
     yield
-
-
-router = APIRouter()
-
-
-@router.get("/")
-async def check() -> dict[str, str]:
-    return {"status": "ok, api is wooooooooooooOOsh?..."}
+    aiohttp_client = get_aiohttp_client()
+    await aiohttp_client.close()
+    await bot.session.close()
 
 
 def create_app() -> FastAPI:
     app: FastAPI = FastAPI(lifespan=lifespan)
     app.include_router(router=router)
-    app.include_router(router=bot_router)
     return app
 
 
