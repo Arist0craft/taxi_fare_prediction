@@ -28,4 +28,4 @@ jobs:
         with:
           push: true
           tags: arist0craft/taxi_fare_prediction:latest
-          platforms: linux/arm64, linux/amd64,
+          platforms: linux/arm64, linux/amd64
