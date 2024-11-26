@@ -73,8 +73,7 @@ ENV PATH="/app/.venv/bin:$PATH" \
 
 
 # Копируем директорию с виртуальным окружением из предыдущего этапа.
-# COPY --link --from=builder --chown=app:app /_app/ /app/
-COPY --link --from=builder --chown=app:app /_app /app
+COPY --link --from=builder /_app /app
 
 WORKDIR /app
 
