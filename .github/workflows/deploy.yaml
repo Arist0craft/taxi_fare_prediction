@@ -63,7 +63,6 @@ jobs:
         name: stop_server
         run: envsubst < scripts/restart_container.sh || ssh edge /bin/bash
         env:
-          PROJECT_DIR: ${{ secrets.PROJECT_DIR }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_WEBHOOK_URL: ${{ secrets.TG_WEBHOOK_URL }}
