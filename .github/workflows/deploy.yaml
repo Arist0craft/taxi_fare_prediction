@@ -1,0 +1,70 @@
+name: Deploy Docker
+on:
+  workflow_run:
+    workflows: [Build Docker Image]
+    types:
+      - completed
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # Используем текущий репозиторий
+      - 
+        uses: actions/checkout@v4
+        with:
+          ref: "main"
+
+      # Пишем ключи на экзекьютор
+      - 
+        name: create_ssh_key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PROXY_KEY" > ~/.ssh/proxy.key
+          chmod 600 ~/.ssh/proxy.key
+
+          echo "$SSH_EDGE_KEY" > ~/.ssh/edge.key
+          chmod 600 ~/.ssh/edge.key
+        env:
+          SSH_PROXY_KEY: ${{ secrets.SSH_PROXY_KEY }}
+          SSH_EDGE_KEY: ${{ secrets.SSH_EDGE_KEY }}
+
+      # Создаём SSH конфиг на экзекьютор
+      - 
+        name: create_ssh_config
+        run: |
+          touch >> ~/.ssh/config
+          cat <<EOT >> ~/.ssh/config
+          Host proxy_machine
+              HostName $SSH_PROXY_HOST
+              Port $SSH_PROXY_PORT
+              User $SSH_PROXY_USER
+              IdentityFile ~/.ssh/proxy.key
+              StrictHostKeyChecking no
+
+          Host edge
+              HostName $SSH_EDGE_HOST
+              Port $SSH_EDGE_PORT
+              User $SSH_EDGE_USER
+              ProxyJump proxy_machine
+              IdentityFile ~/.ssh/edge.key
+              StrictHostKeyChecking no
+          EOT
+        env:
+          SSH_PROXY_HOST: ${{ secrets.SSH_PROXY_HOST }}
+          SSH_PROXY_PORT: ${{ secrets.SSH_PROXY_PORT }}
+          SSH_PROXY_USER: ${{ secrets.SSH_PROXY_USER }}
+          SSH_EDGE_HOST: ${{ secrets.SSH_EDGE_HOST }}
+          SSH_EDGE_PORT: ${{ secrets.SSH_EDGE_PORT }}
+          SSH_EDGE_USER: ${{ secrets.SSH_EDGE_USER }}
+
+      # Перезапуск контейнера
+      - 
+        name: stop_server
+        run: envsubst < scripts/restart_container.sh || ssh edge /bin/bash
+        env:
+          PROJECT_DIR: ${{ secrets.PROJECT_DIR }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_WEBHOOK_URL: ${{ secrets.TG_WEBHOOK_URL }}
+          GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}

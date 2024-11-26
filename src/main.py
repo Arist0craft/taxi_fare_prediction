@@ -60,3 +60,8 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app=app, host=settings.HOST, port=ProcessLookupError)

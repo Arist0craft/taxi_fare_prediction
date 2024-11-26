@@ -1,45 +1,43 @@
-[tool.poetry]
+[project]
 name = "taxi-fare-prediction"
 version = "0.1.0"
 description = ""
-authors = ["Arist0craft <dimnktn@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiogram>=3.15.0",
+    "aiohttp<3.11",
+    "alembic>=1.14.0",
+    "catboost>=1.2.7",
+    "fastapi[all]>=0.115.5",
+    "holidays>=0.61",
+    "joblib>=1.4.2",
+    "numpy<2.0",
+    "pandas>=2.2.3",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.1",
+    "pyproj>=3.7.0",
+    "scikit-learn>=1.5.2",
+    "sqlalchemy>=2.0.36",
+    "uvicorn>=0.32.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-numpy = "<2.0"
-pandas = "^2.2.3"
-catboost = "^1.2.7"
-scikit-learn = "^1.5.2"
-pydantic = "^2.9.2"
-joblib = "^1.4.2"
-pydantic-settings = "^2.6.1"
-uvicorn = "^0.32.0"
-sqlalchemy = "^2.0.36"
-alembic = "^1.14.0"
-fastapi = {extras = ["all"], version = "^0.115.5"}
-aiogram = "^3.14.0"
-aiohttp = "<3.11"
-magic-filter = "^1.0.12"
-
-[tool.poetry.group.dev.dependencies]
-lightgbm = "^4.5.0"
-seaborn = "^0.13.2"
-matplotlib = "^3.9.2"
-pytest = "^8.3.3"
-jupyter = "^1.1.1"
-ruff = "^0.7.3"
-pre-commit = "^4.0.1"
-scikit-learn = "^1.5.2"
-optuna = "^4.1.0"
-catboost = "^1.2.7"
-pyproj = "^3.7.0"
-holidays = "^0.60"
-category-encoders = "^2.6.4"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "catboost>=1.2.7",
+    "category-encoders>=2.6.4",
+    "holidays>=0.61",
+    "jupyter>=1.1.1",
+    "lightgbm>=4.5.0",
+    "matplotlib>=3.9.2",
+    "optuna>=4.1.0",
+    "pre-commit>=4.0.1",
+    "pyproj>=3.7.0",
+    "pytest>=8.3.3",
+    "ruff>=0.8.0",
+    "scikit-learn>=1.5.2",
+    "seaborn>=0.13.2",
+]
 
 [tool.ruff]
 line-length = 88
@@ -67,3 +65,6 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.uv.workspace]
+members = ["kik", "kek"]
