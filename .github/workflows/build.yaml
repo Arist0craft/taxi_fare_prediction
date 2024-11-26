@@ -4,6 +4,7 @@ on:
     branches:
       - main
     types: [closed]
+  workflow_dispatch:
 jobs:
   build_image:
     if: github.event.pull_request.merged == true
