@@ -61,7 +61,7 @@ jobs:
       # Перезапуск контейнера
       - 
         name: stop_server
-        run: envsubst < scripts/restart_container.sh || ssh edge /bin/bash
+        run: envsubst < scripts/restart_container.sh | ssh edge /bin/bash
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
