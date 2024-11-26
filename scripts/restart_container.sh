@@ -6,4 +6,9 @@ sudo docker run \
     -p 8080:$PORT \
     --name taxi_fare_prediction \
     --restart always \
+    --env SECRET_KEY=$SECRET_KEY \
+    --env TG_BOT_TOKEN=$TG_BOT_TOKEN \
+    --env TG_BOT_TOKEN=$TG_BOT_TOKEN \
+    --env TG_WEBHOOK_URL=$TG_WEBHOOK_URL \
+    --env GEOCODE_API_KEY=$GEOCODE_API_KEY \
     arist0craft/taxi_fare_prediction:latest
