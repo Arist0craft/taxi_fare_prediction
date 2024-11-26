@@ -32,7 +32,7 @@ jobs:
       - 
         name: create_ssh_config
         run: |
-          touch >> ~/.ssh/config
+          touch ~/.ssh/config
           cat <<EOT >> ~/.ssh/config
           Host proxy_machine
               HostName $SSH_PROXY_HOST
