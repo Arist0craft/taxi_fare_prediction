@@ -2765,12 +2765,13 @@ wheels = [
 [[package]]
 name = "taxi-fare-prediction"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "aiogram" },
     { name = "aiohttp" },
     { name = "alembic" },
     { name = "catboost" },
+    { name = "category-encoders" },
     { name = "fastapi", extra = ["all"] },
     { name = "holidays" },
     { name = "joblib" },
@@ -2807,6 +2808,7 @@ requires-dist = [
     { name = "aiohttp", specifier = "<3.11" },
     { name = "alembic", specifier = ">=1.14.0" },
     { name = "catboost", specifier = ">=1.2.7" },
+    { name = "category-encoders", specifier = ">=2.6.4" },
     { name = "fastapi", extras = ["all"], specifier = ">=0.115.5" },
     { name = "holidays", specifier = ">=0.61" },
     { name = "joblib", specifier = ">=1.4.2" },
