@@ -75,6 +75,9 @@ ENV PATH="/app/.venv/bin:$PATH" \
 # Копируем директорию с виртуальным окружением из предыдущего этапа.
 COPY --link --from=builder /_app /app
 
+# Копируем папку с моделями
+COPY --link /models /app/models
+
 WORKDIR /app
 
 # Выводим информацию о питоне
