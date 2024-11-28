@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from aiogram import Bot
-from aiogram.types import WebhookInfo
+from aiogram.types import BufferedInputFile, WebhookInfo
 from fastapi import FastAPI
 
 from src.bot import get_bot
@@ -29,8 +29,14 @@ async def set_webhook(bot: Bot):
     if webhook_info.url == webhook_url:
         return
 
+    certificate = None
+    if settings.TG_WEBHOOK_CERTIFICATE is not None:
+        certificate = BufferedInputFile(
+            bytes(settings.TG_WEBHOOK_CERTIFICATE, "utf-8"), "cert.pem"
+        )
+
     is_set_webhook: bool = await bot.set_webhook(
-        webhook_url, secret_token=settings.SECRET_KEY
+        webhook_url, secret_token=settings.SECRET_KEY, certificate=certificate
     )
 
     if not is_set_webhook:
