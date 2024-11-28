@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     PORT: int = Field(default=8080)
     SECRET_KEY: str = Field()
     TG_BOT_TOKEN: str = Field()
+    TG_WEBHOOK_CERTIFICATE: str | None = Field(default=None)
     TG_WEBHOOK_URL: AnyUrl = Field()
     GEOCODE_API_KEY: str = Field()
 
