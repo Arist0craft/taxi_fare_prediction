@@ -11,5 +11,5 @@ sudo docker run \
     --env TG_BOT_TOKEN=$TG_BOT_TOKEN \
     --env TG_WEBHOOK_URL=$TG_WEBHOOK_URL \
     --env GEOCODE_API_KEY=$GEOCODE_API_KEY \
-    --env TG_WEBHOOK_CERTIFICATE=$TG_WEBHOOK_CERTIFICATE \
+    --env TG_WEBHOOK_CERTIFICATE="$TG_WEBHOOK_CERTIFICATE" \
     arist0craft/taxi_fare_prediction:latest
