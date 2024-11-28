@@ -89,5 +89,6 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_WEBHOOK_URL: ${{ secrets.TG_WEBHOOK_URL }}
+          TG_WEBHOOK_CERTIFICATE: ${{ secrets.TG_WEBHOOK_CERTIFICATE }}
           GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
           PORT: ${{ secrets.PORT }}
