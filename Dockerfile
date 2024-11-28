@@ -1,7 +1,7 @@
 ###############
 # BUILD STAGE #
 ###############
-FROM python:3.11-bookworm AS builder
+FROM python:3.11-slim-bookworm AS builder
 
 # Копируем утилиту из официального образа
 # https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
