@@ -8,8 +8,10 @@ from app.bot import get_bot
 from app.router import router
 from app.settings import Settings, get_settings
 from app.utils.aiohttpt_client import get_aiohttp_client
+from app.utils.logging_settings import setup_logging
 
 settings: Settings = get_settings()
+setup_logging()
 
 
 async def set_webhook(bot: Bot):
