@@ -2,8 +2,8 @@ from aiogram.types import Update
 from fastapi import APIRouter, Depends
 from typing_extensions import Annotated
 
-from src.bot import Bot, Dispatcher, get_bot, get_dispatcher
-from src.settings import Settings, get_settings
+from app.bot import Bot, Dispatcher, get_bot, get_dispatcher
+from app.settings import Settings, get_settings
 
 settings: Settings = get_settings()
 

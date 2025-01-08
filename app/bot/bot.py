@@ -2,9 +2,9 @@ from functools import lru_cache
 
 from aiogram import Bot, Dispatcher
 
-from src.bot.main_router import router
-from src.bot.single_predicion_router import router as single_prediction_router
-from src.settings import Settings, get_settings
+from app.bot.main_router import router
+from app.bot.single_predicion_router import router as single_prediction_router
+from app.settings import Settings, get_settings
 
 settings: Settings = get_settings()
 

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from src.settings import get_settings
-from src.utils.aiohttpt_client import AiohttpClient, get_aiohttp_client
+from app.settings import get_settings
+from app.utils.aiohttpt_client import AiohttpClient, get_aiohttp_client
 
 
 class GeocodeResult(BaseModel):

@@ -9,10 +9,10 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from pydantic import ValidationError
 
-from src.bot.menu_buttons import MenuButtons, MenuButtonsData
-from src.bot.validators import validate_coordinates, validate_datetime
-from src.model import TaxiTravel, predict
-from src.utils.geocode_client import geocode_client
+from app.bot.menu_buttons import MenuButtons, MenuButtonsData
+from app.bot.validators import validate_coordinates, validate_datetime
+from app.model import TaxiTravel, predict
+from app.utils.geocode_client import geocode_client
 
 
 class SinglePredictionStates(StatesGroup):

@@ -24,7 +24,7 @@ ENV UV_COMPILE_BYTECODE=1 \
     PYTHONOPTIMIZE=1
 
 # Копируем конфиги зависимостей
-COPY pyproject.toml uv.lock /_app/
+COPY pyproject.toml uv.lock /_project/
 
 # Для быстрой локальной установки зависимостей монтируем кэш-директорию, в которой будет храниться глобальный кэш uv.
 # Первый вызов `uv sync` создаёт виртуальное окружение и устанавливает зависимости без текущего проекта.
@@ -34,7 +34,7 @@ COPY pyproject.toml uv.lock /_app/
 #   Необходима, когда `uv` используется как менеджер проекта (а не `pdm`, например)
 #   https://docs.astral.sh/uv/guides/integration/docker/#non-editable-installs
 RUN --mount=type=cache,target=/root/.cache/uv <<EOF
-cd /_app
+cd /_project
 uv sync \
     --no-dev \
     --frozen \
@@ -42,14 +42,14 @@ uv sync \
 EOF
 
 # Копируем исходный код проекта в папку сборки
-COPY src/ _app/src
+COPY ./app /_project/app
 
 # Устанавливаем текущий проект.
 # Опция `--no-editable` отключает установку проекта в  режиме "editable".
 #   Код проекта копируется в директорию виртуального окружения `site-packages`.
 #   https://docs.astral.sh/uv/guides/integration/docker/#non-editable-installs
 RUN --mount=type=cache,target=/root/.cache/uv <<EOF
-cd /_app
+cd /_project
 uv sync \
     --no-dev \
     --frozen
@@ -67,18 +67,21 @@ FROM python:3.11-slim-bookworm AS final
 # PYTHONOPTIMIZE — указывает интерпретатору Python, что нужно использовать ранее скомпилированные файлы из  директории `__pycache__` с  суффиксом `opt-1` в имени.
 # PYTHONUNBUFFERED — отключает буферизацию для потоков stdout и stderr.
 # https://docs.python.org/3/using/cmdline.html#environment-variables
-ENV PATH="/app/.venv/bin:$PATH" \
+ENV PATH="/project/.venv/bin:$PATH" \
     PYTHONOPTIMIZE=1 \
     PYTHONUNBUFFERED=1
 
+ENV PYTHONPATH="/project/app:$PTHONPATH"
 
 # Копируем директорию с виртуальным окружением из предыдущего этапа.
-COPY --link --from=builder /_app /app
+COPY --link --from=builder /_project /project
 
 # Копируем папку с моделями
-COPY --link /models /app/models
+COPY --link /models /project/models
+COPY --link /logging.yaml /project/logging.yaml
 
-WORKDIR /app
+
+WORKDIR /project
 
 # Выводим информацию о питоне
 RUN <<EOF
@@ -86,4 +89,5 @@ python --version
 python -I -m site
 EOF
 
-CMD ["python", "-m", "fastapi", "run", "src/main.py", "--host", "0.0.0.0", "--port", "8080"]
+
+CMD ["python", "app/main.py"]
