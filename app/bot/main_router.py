@@ -2,7 +2,7 @@ from aiogram import F, Router, types
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command, or_f
 
-from src.bot.menu_buttons import MenuButtons, MenuButtonsData, get_menu_buttons_builder
+from app.bot.menu_buttons import MenuButtons, MenuButtonsData, get_menu_buttons_builder
 
 router = Router()
 

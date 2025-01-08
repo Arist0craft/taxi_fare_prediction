@@ -11,7 +11,7 @@ from pyproj import Transformer
 from sklearn.base import TransformerMixin
 from sklearn.pipeline import Pipeline
 
-from src.settings import get_settings
+from app.settings import get_settings
 
 
 class TaxiTravel(BaseModel):

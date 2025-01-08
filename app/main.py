@@ -4,10 +4,10 @@ from aiogram import Bot
 from aiogram.types import BufferedInputFile, WebhookInfo
 from fastapi import FastAPI
 
-from src.bot import get_bot
-from src.router import router
-from src.settings import Settings, get_settings
-from src.utils.aiohttpt_client import get_aiohttp_client
+from app.bot import get_bot
+from app.router import router
+from app.settings import Settings, get_settings
+from app.utils.aiohttpt_client import get_aiohttp_client
 
 settings: Settings = get_settings()
 
@@ -70,4 +70,9 @@ app = create_app()
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app=app, host=settings.HOST, port=ProcessLookupError)
+    uvicorn.run(
+        app=app,
+        host=settings.HOST,
+        port=settings.PORT,
+        log_config=str(settings.LOGGING_CONFIG_PATH),
+    )
