@@ -71,7 +71,7 @@ ENV PATH="/project/.venv/bin:$PATH" \
     PYTHONOPTIMIZE=1 \
     PYTHONUNBUFFERED=1
 
-ENV PYTHONPATH="/project/app:$PTHONPATH"
+ENV PYTHONPATH="/project/app"
 
 # Копируем директорию с виртуальным окружением из предыдущего этапа.
 COPY --link --from=builder /_project /project
