@@ -32,7 +32,10 @@ async def set_webhook(bot: Bot):
         return
 
     certificate = None
-    if settings.TG_WEBHOOK_CERTIFICATE is not None:
+    if (
+        settings.TG_WEBHOOK_CERTIFICATE is not None
+        or settings.TG_WEBHOOK_CERTIFICATE != ""
+    ):
         certificate = BufferedInputFile(
             bytes(settings.TG_WEBHOOK_CERTIFICATE, "utf-8"), "cert.pem"
         )
