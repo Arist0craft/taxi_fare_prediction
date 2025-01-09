@@ -1,4 +1,4 @@
-from aiogram.types import Update
+from aiogram.types import Update, WebhookInfo
 from fastapi import APIRouter, Depends
 from typing_extensions import Annotated
 
@@ -22,3 +22,8 @@ async def webhook(
     bot: Annotated[Bot, Depends(get_bot)],
 ):
     await dispatcher.feed_update(bot=bot, update=update)
+
+
+@router.get("/bot_webhook_info")
+async def bot_webhook_info(bot: Annotated[Bot, Depends(get_bot)]) -> WebhookInfo:
+    return await bot.get_webhook_info()
