@@ -1,6 +1,8 @@
+import logging
 from contextlib import asynccontextmanager
 
 from aiogram import Bot
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import BufferedInputFile, WebhookInfo
 from fastapi import FastAPI
 
@@ -12,6 +14,8 @@ from app.utils.logging_settings import setup_logging
 
 settings: Settings = get_settings()
 setup_logging()
+
+logger = logging.getLogger(__name__)
 
 
 async def set_webhook(bot: Bot):
@@ -34,18 +38,22 @@ async def set_webhook(bot: Bot):
     certificate = None
     if (
         settings.TG_WEBHOOK_CERTIFICATE is not None
-        or settings.TG_WEBHOOK_CERTIFICATE != ""
+        and settings.TG_WEBHOOK_CERTIFICATE.strip() != ""
     ):
         certificate = BufferedInputFile(
             bytes(settings.TG_WEBHOOK_CERTIFICATE, "utf-8"), "cert.pem"
         )
+    try:
+        is_set_webhook: bool = await bot.set_webhook(
+            webhook_url, secret_token=settings.SECRET_KEY, certificate=certificate
+        )
+        if is_set_webhook:
+            logger.info("Webhook was set!")
+        else:
+            logger.info("Webhook wasn't set, debug error")
 
-    is_set_webhook: bool = await bot.set_webhook(
-        webhook_url, secret_token=settings.SECRET_KEY, certificate=certificate
-    )
-
-    if not is_set_webhook:
-        raise RuntimeWarning("Telegram webhook wasn't set")
+    except TelegramBadRequest as err:
+        logger.error(err)
 
 
 @asynccontextmanager
